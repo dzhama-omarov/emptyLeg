@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us - Empty Leg Cargo Aggregator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav {
+            margin-top: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .section h3 {
+            margin-top: 0;
+            color: #0056b3;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        .team {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .member {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            width: 250px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .member img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            margin-top: 40px;
+        }
+
+        @media(max-width: 768px) {
+            .team {
+                flex-direction: column;
+                align-items: center;
+            }
+            .member {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>About Us - Empty Leg Cargo Aggregator</h1>
+    <nav>
+        <a href="{{ url_for('home_page') }}">Home</a>
+        <a href="about.html" style="text-decoration:underline;">About Us</a>
+        <a href="{{ url_for('features_page') }}">Features</a>
+        <a href="{{ url_for('signUp_page') }}">Sign Up</a>
+        <a href="{{ url_for('contacts_page') }}">Contact</a>
+    </nav>
+</header>
+
+<main>
+    <h2>Our Mission</h2>
+    <div class="section">
+        <p>
+            At Empty Leg Cargo Aggregator, our mission is to revolutionize the cargo logistics industry by connecting companies with available empty flights to those in need of cargo delivery. We aim to reduce costs, increase efficiency, and promote sustainable aviation practices worldwide.
+        </p>
+    </div>
+
+    <h2>Who We Are</h2>
+    <div class="section">
+        <p>
+            We are a team of logistics experts, aviation professionals, and tech enthusiasts dedicated to creating innovative solutions for cargo transportation. Our platform leverages technology to optimize flight routes, maximize aircraft utilization, and foster global collaborations.
+        </p>
+    </div>
+
+    <h2>Our Team</h2>
+    <div class="team">
+        <div class="member">
+            <img src="https://via.placeholder.com/100" alt="Team Member 1" />
+            <h4>Jane Doe</h4>
+            <p>CEO & Founder</p>
+            <p>Jane has over 15 years of experience in aviation and logistics, leading innovative projects to streamline cargo operations.</p>
+        </div>
+        <div class="member">
+            <img src="https://via.placeholder.com/100" alt="Team Member 2" />
+            <h4>John Smith</h4>
+            <p>CTO</p>
+            <p>John is a tech expert specializing in platform development and data analytics for logistics solutions.</p>
+        </div>
+        <div class="member">
+            <img src="https://via.placeholder.com/100" alt="Team Member 3" />
+            <h4>Alice Johnson</h4>
+            <p>Operations Manager</p>
+            <p>Alice manages client relations and ensures smooth operations across our network of partners worldwide.</p>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 Empty Leg Cargo Aggregator. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

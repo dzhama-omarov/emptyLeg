@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Features - Empty Leg Cargo Aggregator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav {
+            margin-top: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        nav a:hover, nav a.active {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #007BFF;
+            margin-bottom: 30px;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .feature-item {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 30%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .feature-item h3 {
+            margin-top: 0;
+            color: #0056b3;
+            margin-bottom: 15px;
+        }
+
+        .feature-item p {
+            line-height: 1.5;
+            font-size: 1em;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .feature-item {
+                width: 45%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .feature-item {
+                width: 100%;
+            }
+            nav {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Features - Empty Leg Cargo Aggregator</h1>
+    <nav>
+        <a href="{{ url_for('home_page') }}">Home</a>
+        <a href="{{ url_for('about_page') }}">About</a>
+        <a href="features.html" class="active">Features</a>
+        <a href="{{ url_for('signUp_page') }}">Sign Up</a>
+        <a href="{{ url_for('contacts_page') }}">Contact</a>
+    </nav>
+</header>
+
+<main>
+    <h2>Key Features of Our Platform</h2>
+    <div class="feature-list">
+        <div class="feature-item">
+            <h3>Real-Time Flight Matching</h3>
+            <p>Instantly connect empty leg cargo flights with shippers looking for available capacity, ensuring no flight goes underutilized.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Advanced Route Optimization</h3>
+            <p>Our platform uses smart algorithms to find the most efficient and cost-effective cargo routes, reducing delays and expenses.</p>
+        </div>
+        <div class="feature-item">
+            <h3>User-Friendly Dashboard</h3>
+            <p>Easily manage your cargo shipments, track flights, and communicate with partners through a clean and intuitive interface.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Global Network Access</h3>
+            <p>Gain access to a worldwide network of cargo providers and flight operators, expanding your business opportunities.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Secure Transactions</h3>
+            <p>We ensure secure payment processing and data privacy so you can focus on your logistics without worries.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Custom Alerts & Notifications</h3>
+            <p>Stay updated with instant notifications about new flight opportunities, shipment statuses, and important deadlines.</p>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 Empty Leg Cargo Aggregator. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

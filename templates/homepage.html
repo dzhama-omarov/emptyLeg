@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Empty Leg Cargo Aggregator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav {
+            margin-top: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+            background-color: #e0f7fa;
+        }
+
+        .hero h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            max-width: 600px;
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .cta-buttons a {
+            padding: 15px 30px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .cta-buttons a:hover {
+            background-color: #0056b3;
+        }
+
+        section {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007BFF;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .feature {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            width: 300px;
+            margin: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            margin-top: 40px;
+        }
+
+        @media(max-width: 768px) {
+            .features {
+                flex-direction: column;
+                align-items: center;
+            }
+            .feature {
+                width: 80%;
+            }
+            .cta-buttons {
+                flex-direction: column;
+            }
+            .cta-buttons a {
+                width: 80%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Empty Leg Cargo Aggregator</h1>
+    <nav>
+        <a href="{{ url_for('about_page') }}">About</a>
+        <a href="{{ url_for('features_page') }}">Features</a>
+        <a href="{{ url_for('signUp_page') }}">Sign Up</a>
+        <a href="{{ url_for('contacts_page') }}">Contact</a>
+    </nav>
+</header>
+
+<section class="hero" id="about">
+    <h2>Connecting Empty Legs with Cargo Needs</h2>
+    <p>
+        Maximize flight efficiency and reduce costs by connecting companies with available empty cargo flights to those needing delivery. Our platform simplifies the process of finding and offering empty leg routes to optimize cargo logistics worldwide.
+    </p>
+    <div class="cta-buttons">
+        <a href="#sign-up">Get Started</a>
+        <a href="#learn-more">Learn More</a>
+    </div>
+</section>
+
+<section id="features">
+    <h3>Why Use Our Platform?</h3>
+    <div class="features">
+        <div class="feature">
+            <h4>Cost Savings</h4>
+            <p>Access affordable cargo routes by utilizing empty legs, saving money for logistics companies.</p>
+        </div>
+        <div class="feature">
+            <h4>Environmental Benefits</h4>
+            <p>Reduce carbon footprint by maximizing the utilization of existing flights.</p>
+        </div>
+        <div class="feature">
+            <h4>Global Network</h4>
+            <p>Connect with a worldwide network of cargo providers and shippers for seamless logistics.</p>
+        </div>
+    </div>
+</section>
+
+<section id="sign-up" style="background-color:#fff;">
+    <h3 style="text-align:center; margin-bottom:20px;">Join Our Platform</h3>
+    <p style="text-align:center;">Sign up today to start connecting empty flights with cargo needs and optimize your logistics.</p>
+    <div style="text-align:center; margin-top:20px;">
+        <a href="#" style="padding:15px 30px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">Sign Up Now</a>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2024 Empty Leg Cargo Aggregator. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

@@ -1,107 +1,72 @@
-from sqlite3 import connect, IntegrityError
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, Session
+from model.dbModels import Base, User
+from dotenv import load_dotenv
+import os
+import bcrypt
 
+load_dotenv()
 
-def get_allowed_fields(table_name):
-    conn = connect("database/users.db")
-    cursor = conn.cursor()
+SQLALCHEMY_DATABASE_URL = os.getenv('DATABASE_URL')
 
-    cursor.execute(f"PRAGMA table_info({table_name})")
-    columns = [row[1] for row in cursor.fetchall()]
-    conn.close()
-    return set(columns)
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def init_db():
-    conn = connect("database/users.db")
-    cursor = conn.cursor()
-
-    cursor.execute(
-        '''CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT UNIQUE NOT NULL,
-            fullName TEXT UNIQUE NOT NULL,
-            company TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL
-        )'''
-    )
-
-    conn.commit()
-    conn.close()
+    Base.metadata.create_all(bind=engine)
 
 
-def register_user(email, fullName, company, password):
-    conn = connect("database/users.db")
-    cursor = conn.cursor()
+def hash_password(password):
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode(), salt)
+    return hashed_password.decode()
 
-    cursor.execute(
-        '''SELECT *
-        FROM users
-        WHERE email = ?''',
-        (email,)
-    )
-    if cursor.fetchone():
+
+def register_user(db: Session, email, fullName, company, password):
+    existing_user = db.query(User).filter(User.email == email).first()
+
+    if existing_user:
         return 'This email is already registered'
     else:
-        cursor.execute(
-            '''INSERT INTO users (email, fullName, company, password)
-            VALUES (?,?,?,?)''',
-            (email, fullName, company, password)
+        new_user = User(
+            email=email,
+            fullName=fullName,
+            company=company,
+            password=hash_password(password)
         )
-        conn.commit()
-        conn.close()
+        db.add(new_user)
+        db.commit()
         return "Registration successful"
 
 
-def add_user(username, password):
-    conn = connect('database/users.db')
-    cursor = conn.cursor()
-    try:
-        cursor.execute(
-            'INSERT INTO users (username, password) VALUES (?, ?)',
-            (username, password)
-        )
-        conn.commit()
-    except IntegrityError:
-        return False  # username уже есть
-    finally:
-        conn.close()
-    return True
-
-
-def logIn_success(login, password):
-    conn = connect('database/users.db')
-    cursor = conn.cursor()
-
-    cursor.execute(
-        '''SELECT id, email, password
-        FROM users
-        WHERE email = ?''',
-        (login,)
-    )
-    logIn_data = cursor.fetchone()
-    conn.close()
-    if logIn_data[1] == login and logIn_data[2] == password:
-        return logIn_data[0]
-    return None
-
-
-def get_from_db(user_id, *fields):
-    allowed_fields = get_allowed_fields('users')
-
-    if not fields:
-        fields = ('*',)
+def logIn_success(db: Session, login, password):
+    user = db.query(User).filter(User.email == login).first()
+    if user and bcrypt.checkpw(password.encode(), user.password.encode()):
+        return user.id, user.fullName
     else:
-        fields = tuple(f for f in fields if f in allowed_fields)
-        if not fields:
-            fields = ('*',)
+        return None
 
-    columns = ', '.join(fields)
-    query = f'SELECT {columns} FROM users WHERE id = ?'
 
-    conn = connect('database/users.db')
-    cursor = conn.cursor()
+def get_from_db(db: Session, user_id, *fields):
+    if not fields:
+        user = db.query(User).filter(User.id == user_id).first()
+        return user
 
-    cursor.execute(query, (user_id,))
-    result = cursor.fetchone()
-    conn.close()
-    return result
+    allowed_fields = set(c.name for c in User.__table__.columns)
+    selected_fields = [f for f in fields if f in allowed_fields]
+
+    if not selected_fields:
+        user = db.query(User).filter(User.id == user_id).first()
+        return user
+
+    columns = [getattr(User, f) for f in selected_fields]
+    result = db.query(*columns).filter(User.id == user_id).first()
+
+    if result is None:
+        return result
+
+    if len(selected_fields) == 1:
+        return result[0]
+    else:
+        return tuple(result)

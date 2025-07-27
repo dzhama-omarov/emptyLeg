@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from database.db_funcs import register_user, logIn_success, get_from_db
+from database.db_funcs import SessionLocal
 
 
 app = Flask(
@@ -12,13 +13,10 @@ app.secret_key = "some_secret_key"
 
 @app.route("/")
 def home_page():
-    if 'user_id' in session:
-        user_id = session['user_id']
-        user_name = get_from_db(user_id, 'fullName')[0]
+    if 'user_name' in session:
         return render_template(
             "homepage.html",
-            user_id=user_id,
-            user_name=user_name
+            user_name=session['user_name']
         )
     else:
         return render_template("homepage.html")
@@ -42,7 +40,8 @@ def signUp_page():
         fullName = request.form["name"]
         email = request.form["email"]
         password = request.form["password"]
-        message = register_user(email, fullName, company, password)
+        with SessionLocal() as db:
+            message = register_user(db, email, fullName, company, password)
     return render_template("signUp.html", message=message)
 
 
@@ -55,9 +54,11 @@ def logIn_page():
 
     login = request.form["email"]
     password = request.form["password"]
-    user_id = logIn_success(login, password)
+    with SessionLocal() as db:
+        user_id, user_name = logIn_success(db, login, password)
     if user_id:
         session['user_id'] = user_id
+        session['user_name'] = user_name
         return redirect(url_for('profile_page'))
     else:
         return render_template('logIn.html', message='Wrong email or password')
@@ -70,9 +71,10 @@ def contacts_page():
 
 @app.route("/profile")
 def profile_page():
-    name, email, company = get_from_db(
-        session['user_id'], 'fullName', 'email', 'company'
-    )
+    with SessionLocal() as db:
+        name, email, company = get_from_db(
+            db, session['user_id'], 'fullName', 'email', 'company'
+        )
     return render_template(
         'profile.html',
         user_name=name,

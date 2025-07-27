@@ -139,13 +139,13 @@
     <nav>
         <a href="{{ url_for('about_page') }}">About</a>
         <a href="{{ url_for('features_page') }}">Features</a>
-        {% if not session.get('user_id') %}
+        {% if not session.get('user_name') %}
             <a href="{{ url_for('signUp_page') }}">Sign Up</a>
         {% endif %}
             <a href="{{ url_for('contacts_page') }}">Contact</a>
 
         <span style="float:right; margin-right:20px;">
-            {% if session.get('user_id') %}
+            {% if session.get('user_name') %}
                 <a href="{{ url_for('profile_page') }}">{{ user_name }}</a>
             {% else %}
                 <a href="{{ url_for('logIn_page') }}">Log In</a>
@@ -160,7 +160,7 @@
         Maximize flight efficiency and reduce costs by connecting companies with available empty cargo flights to those needing delivery. Our platform simplifies the process of finding and offering empty leg routes to optimize cargo logistics worldwide.
     </p>
     <div class="cta-buttons">
-        {% if not session.get('user_id') %}
+        {% if not session.get('user_name') %}
             <a href="{{ url_for('signUp_page') }}">Get Started</a>
         {% else %}
             <a href="{{ url_for('profile_page') }}">My Profile</a>
@@ -187,7 +187,7 @@
     </div>
 </section>
 
-{% if not session.get('user_id') %}
+{% if not session.get('user_name') %}
     <section id="sign-up" style="background-color:#fff;">
         <h3 style="text-align:center; margin-bottom:20px;">Join Our Platform</h3>
         <p style="text-align:center;">Sign up today to start connecting empty flights with cargo needs and optimize your logistics.</p>

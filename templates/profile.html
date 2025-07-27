@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up - Empty Leg Cargo Aggregator</title>
+    <title>My Profile - Empty Leg Cargo Aggregator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,7 +33,7 @@
             text-decoration: underline;
         }
         main {
-            max-width: 600px;
+            max-width: 800px;
             margin: 40px auto;
             padding: 30px 20px;
             background-color: white;
@@ -45,47 +45,30 @@
             color: #007BFF;
             margin-bottom: 30px;
         }
-        form {
+        .profile-info {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .profile-info p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        .profile-actions {
             display: flex;
-            flex-direction: column;
-            gap: 15px;
+            justify-content: center;
+            gap: 20px;
         }
-        label {
-            font-weight: bold;
-        }
-        input {
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 1em;
-        }
-        button {
-            padding: 15px;
+        .profile-actions a {
+            padding: 15px 25px;
             background-color: #007BFF;
             color: white;
-            border: none;
             border-radius: 5px;
-            font-weight: bold;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .have-account {
-            margin-top: 15px;
-            text-align: center;
-            font-size: 0.9em;
-        }
-        .have-account a {
-            color: #007BFF;
             text-decoration: none;
             font-weight: bold;
-            margin-left: 5px;
+            transition: background-color 0.3s;
         }
-        .have-account a:hover {
-            text-decoration: underline;
+        .profile-actions a:hover {
+            background-color: #0056b3;
         }
         footer {
             background-color: #333;
@@ -99,47 +82,38 @@
                 margin: 20px;
                 padding: 20px;
             }
+            .profile-actions {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Sign Up - Empty Leg Cargo Aggregator</h1>
+    <h1>My Profile</h1>
     <nav>
         <a href="{{ url_for('home_page') }}">Home</a>
         <a href="{{ url_for('about_page') }}">About</a>
         <a href="{{ url_for('features_page') }}">Features</a>
+        <a href="{{ url_for('profile_page') }}" class="active">Profile</a>
         <a href="{{ url_for('contacts_page') }}">Contact</a>
     </nav>
 </header>
 
 <main>
-    <h2>Create Your Account</h2>
-    <form action="{{ url_for('signUp_page') }}" method="post">
-        <label for="company">Company Name</label>
-        <input type="text" id="company" name="company" placeholder="Your company name" required />
+    <h2>Welcome, {{ user_name }}!</h2>
 
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" placeholder="Your full name" required />
+    <div class="profile-info">
+        <p>Email: {{ user_email }}</p>
+        <p>Company: {{ user_company }}</p>
+    </div>
 
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" placeholder="you@example.com" required />
-
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Create a password" required />
-
-        <label for="confirm-password">Confirm Password</label>
-        <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required />
-
-        <button type="submit">Sign Up</button>
-    </form>
-    {% if message %}
-        <p style="color:red; text-align:center;">{{ message }}</p>
-    {% endif %}
-    <div class="have-account">
-        Already have an account?
-        <a href="{{ url_for('logIn_page') }}">Log In</a>
+    <div class="profile-actions">
+        <a href="{{ url_for('orders_page') }}">Order History</a>
+        <a href="{{ url_for('settings_page') }}">Profile Settings</a>
+        <a href="{{ url_for('logout') }}">Log Out</a>
     </div>
 </main>
 

@@ -116,23 +116,58 @@
 
 <main>
     <h2>Create Your Account</h2>
-    <form action="{{ url_for('signUp_page') }}" method="post">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        
         <label for="company">Company Name</label>
-        <input type="text" id="company" name="company" placeholder="Your company name" required />
+        {{ form.company(placeholder="Your company name") }}
+        {% if form.company.errors %}
+            {% for error in form.company.errors %}
+                <span style="color: red; font-size: 0.9em;">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
 
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" placeholder="Your full name" required />
+        <label for="firstName">First Name</label>
+        {{ form.firstName(placeholder="Your first name") }}
+        {% if form.firstName.errors %}
+            {% for error in form.firstName.errors %}
+                <span style="color: red; font-size: 0.9em;">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+
+        <label for="lastName">Last Name</label>
+        {{ form.lastName(placeholder="Your last name") }}
+        {% if form.lastName.errors %}
+            {% for error in form.lastName.errors %}
+                <span style="color: red; font-size: 0.9em;">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
 
         <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" placeholder="you@example.com" required />
+        {{ form.email(placeholder="you@example.com") }}
+        {% if form.email.errors %}
+            {% for error in form.email.errors %}
+                <span style="color: red; font-size: 0.9em;">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
 
         <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Create a password" required />
+        {{ form.password(placeholder="Create a password") }}
+        {% if form.password.errors %}
+            {% for error in form.password.errors %}
+                <span style="color: red; font-size: 0.9em;">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
 
         <label for="confirm-password">Confirm Password</label>
-        <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required />
+        {{ form.confirm_password(placeholder="Confirm your password") }}
+        {% if form.confirm_password.errors %}
+            {% for error in form.confirm_password.errors %}
+                <span style="color: red; font-size: 0.9em;">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
 
-        <button type="submit">Sign Up</button>
+        {{ form.submit(class="button") }}
     </form>
     {% if message %}
         <p style="color:red; text-align:center;">{{ message }}</p>

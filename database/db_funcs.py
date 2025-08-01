@@ -45,7 +45,7 @@ def logIn_success(db: Session, login, password):
     if user and bcrypt.checkpw(password.encode(), user.password.encode()):
         return user.id, user.fullName
     else:
-        return None
+        return None, None
 
 
 def get_from_db(db: Session, user_id, *fields):

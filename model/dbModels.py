@@ -1,18 +1,20 @@
 from sqlalchemy import (
     Column, ForeignKey, Integer, String, DateTime, Boolean, Float, Text
 )
+from sqlalchemy.types import Enum as SQLEnum
 from sqlalchemy.orm import declarative_base, relationship
-from enum import Enum
+import enum
 
 Base = declarative_base()
 
 
-class UserTypeEnum(Enum):
+class UserTypeEnum(enum.Enum):
     charterer = "Charterer"
     carrier = "Carrier"
+    broker = "Broker"
 
 
-class CargoTypeEnum(Enum):
+class CargoTypeEnum(enum.Enum):
     general = "General Cargo"
     special = "Special Cargo"
     dangerous = "Dangerous Goods"
@@ -21,7 +23,7 @@ class CargoTypeEnum(Enum):
     live_animals = "Live Animals"
 
 
-class CurrencyEnum(Enum):
+class CurrencyEnum(enum.Enum):
     usd = "USD"
     eur = "EUR"
     rub = "RUB"
@@ -29,13 +31,13 @@ class CurrencyEnum(Enum):
     cny = "CNY"
 
 
-class ContractStatusEnum(Enum):
+class ContractStatusEnum(enum.Enum):
     pending = "Pending"
     signed = "Signed"
     cancelled = "Cancelled"
 
 
-class PaymentStatusEnum(Enum):
+class PaymentStatusEnum(enum.Enum):
     paid = "Paid"
     pending = "Pending"
     overdue = "Overdue"
@@ -54,9 +56,14 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     fullName = Column(String, index=True)
     company = Column(String, index=True)
-    userType = Column(Enum(UserTypeEnum))
+    userType = Column(SQLEnum(UserTypeEnum))
     userRep = Column(Float)
     password = Column(String)
+
+    orders = relationship("Order", back_populates="user", foreign_keys="Order.userId")
+    joined_orders = relationship("Order", back_populates="partner", foreign_keys="Order.partnerUser")
+    chartererContracts = relationship("Contract", back_populates="charterer", foreign_keys="Contract.chartererId")
+    carrierContracts = relationship("Contract", back_populates="carrier", foreign_keys="Contract.carrierId")
 
 
 class Order(Base):
@@ -72,49 +79,42 @@ class Order(Base):
     departureDate = Column(DateTime, nullable=False)
     departureCity = Column(String, nullable=False)
     departureAirport = Column(String, nullable=False)
-    departureCargoType = Column(Enum(CargoTypeEnum), nullable=False)
+    departureCargoType = Column(SQLEnum(CargoTypeEnum), nullable=False)
     departureCargoWeight = Column(Float, nullable=False)
     departureCargoVolume = Column(Float, nullable=False)
     arrivalDate = Column(DateTime, nullable=False)
     arrivalCity = Column(String, nullable=False)
     arrivalAirport = Column(String, nullable=False)
-    arrivalCargoType = Column(Enum(CargoTypeEnum), nullable=False)
+    arrivalCargoType = Column(SQLEnum(CargoTypeEnum), nullable=False)
     arrivalCargoWeight = Column(Float, nullable=False)
     arrivalCargoVolume = Column(Float, nullable=False)
     roundTrip = Column(Boolean, nullable=False)
     orderPrice = Column(Float, nullable=False)
-    orderCurrency = Column(Enum(CurrencyEnum), nullable=False)
-    paymentStatus = Column(Enum(PaymentStatusEnum), nullable=False)
+    orderCurrency = Column(SQLEnum(CurrencyEnum), nullable=False)
+    paymentStatus = Column(SQLEnum(PaymentStatusEnum), nullable=False)
     contractOrder = Column(ForeignKey("contracts.id"))
     orderStatus = Column(String, nullable=False)
     isEmptyLegMatch = Column(Boolean, nullable=False)
 
-    user = relationship('User', back_populates='orders')
+    user = relationship("User", back_populates="orders", foreign_keys=[userId])
+    partner = relationship("User", back_populates="joined_orders", foreign_keys=[partnerUser])
+    contract = relationship("Contract", back_populates="orders")
 
 
 class Contract(Base):
     __tablename__ = "contracts"
 
     id = Column(Integer, primary_key=True)
-    order_id = Column(Integer, ForeignKey("orders.id"), nullable=False)
-    charterer_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    carrier_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    contract_date = Column(DateTime, nullable=False)
-    effective_from = Column(DateTime, nullable=False)
-    effective_to = Column(DateTime, nullable=True)
-    contract_status = Column(Enum(ContractStatusEnum), nullable=False)
-    contract_file_url = Column(String, nullable=True)
-    terms_summary = Column(Text, nullable=True)
-    created_at = Column(DateTime)
+    chartererId = Column(Integer, ForeignKey("users.id"), nullable=False)
+    carrierId = Column(Integer, ForeignKey("users.id"), nullable=False)
+    contractDate = Column(DateTime, nullable=False)
+    effectiveFrom = Column(DateTime, nullable=False)
+    effectiveTo = Column(DateTime, nullable=True)
+    contractStatus = Column(SQLEnum(ContractStatusEnum), nullable=False)
+    contractFileUrl = Column(String, nullable=True)
+    termsSummary = Column(Text, nullable=True)
+    createdAt = Column(DateTime)
 
-    order = relationship("Order", back_populates="contract", uselist=False)
-    charterer = relationship(
-        "Users",
-        foreign_keys=[charterer_id],
-        back_populates="charter_contracts"
-    )
-    carrier = relationship(
-        "Users",
-        foreign_keys=[carrier_id],
-        back_populates="carrier_contracts"
-    )
+    orders = relationship("Order", back_populates="contract")
+    charterer = relationship("User", back_populates="chartererContracts", foreign_keys=[chartererId])
+    carrier = relationship("User", back_populates="carrierContracts", foreign_keys=[carrierId])

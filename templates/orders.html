@@ -1,1 +1,184 @@
-<p>Orders page</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Orders - Empty Leg Cargo Aggregator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0; padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav {
+            margin-top: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        section {
+            max-width: 1200px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #007BFF;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        thead {
+            background-color: #007BFF;
+            color: white;
+        }
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        tbody tr:hover {
+            background-color: #f1faff;
+            cursor: pointer;
+        }
+        .pagination {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        select {
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .no-orders {
+            text-align: center;
+            font-style: italic;
+            padding: 40px 0;
+            color: #666;
+        }
+        .navbar {
+            position: relative;
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 30px;
+        }
+        .navbar-user {
+            margin-left: auto;
+            margin-right: 40px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        @media(max-width: 768px) {
+            th, td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Empty Leg Cargo Aggregator</h1>
+    <nav class="navbar">
+        <div class="navbar-center">
+            <a href="{{ url_for('about_page') }}">About</a>
+            <a href="{{ url_for('features_page') }}">Features</a>
+            <a href="{{ url_for('contacts_page') }}">Contacts</a>
+        </div>
+        <div class="navbar-user">
+            <a href="{{ url_for('profile_page') }}">{{ session.get('user_name') }}</a> |
+        </div>
+    </nav>
+</header>
+
+<section>
+    <h2>My Orders</h2>
+
+    {% if orders|length == 0 %}
+        <div class="no-orders">You have no orders yet.</div>
+    {% else %}
+        <table id="orders-table">
+            <thead>
+                <tr>
+                    <th>Order №</th>
+                    <th>Order Date</th>
+                    <th>Aircraft</th>
+                    <th>Departure City</th>
+                    <th>Arrival City</th>
+                    <th>Payment Status</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr onclick="window.location.href='{{ url_for('order_detail_page', order_number=order.orderNumber) }}'">
+                    <td>{{ order.orderNumber }}</td>
+                    <td>{{ order.orderDate.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ order.aircraftType }}</td>
+                    <td>{{ order.departureCity }}</td>
+                    <td>{{ order.arrivalCity }}</td>
+                    <td>{{ order.paymentStatus.value }}</td>
+                    <td>{{ order.orderPrice }} {{ order.orderCurrency.value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <label for="rowsPerPage">Orders per page:</label>
+            <select id="rowsPerPage" onchange="changeRowsPerPage()">
+                <option value="5" {% if rows_per_page == 5 %}selected{% endif %}>5</option>
+                <option value="10" {% if rows_per_page == 10 %}selected{% endif %}>10</option>
+                <option value="20" {% if rows_per_page == 20 %}selected{% endif %}>20</option>
+            </select>
+        </div>
+    {% endif %}
+</section>
+
+<script>
+    function changeRowsPerPage() {
+        const select = document.getElementById('rowsPerPage');
+        const val = select.value;
+        const url = new URL(window.location.href);
+        url.searchParams.set('rows', val);
+        window.location.href = url.toString();
+    }
+</script>
+
+<footer style="text-align:center; margin: 30px 0; color:#777;">
+    &copy; 2025 Empty Leg Cargo Aggregator. All rights reserved.
+</footer>
+
+</body>
+</html>

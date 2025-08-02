@@ -54,10 +54,11 @@ def signUp_page():
         company = form.company.data
         fullName = f'{form.firstName.data} {form.lastName.data}'
         email = form.email.data
+        userType = form.userType.data
         password = form.password.data
 
         with SessionLocal() as db:
-            message = register_user(db, email, fullName, company, password)
+            message = register_user(db, email, fullName, company, userType, password)
 
         if message == 'Registration successful':
             return redirect(url_for('logIn_page'))

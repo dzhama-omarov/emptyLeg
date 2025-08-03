@@ -23,7 +23,7 @@ def hash_password(password):
     return hashed_password.decode()
 
 
-def register_user(db: Session, email, fullName, company, password):
+def register_user(db: Session, email, fullName, company, userType, password):
     existing_user = db.query(User).filter(User.email == email).first()
 
     if existing_user:
@@ -33,6 +33,8 @@ def register_user(db: Session, email, fullName, company, password):
             email=email,
             fullName=fullName,
             company=company,
+            userType=userType,
+            userRep=50.00,
             password=hash_password(password)
         )
         db.add(new_user)
@@ -45,7 +47,7 @@ def logIn_success(db: Session, login, password):
     if user and bcrypt.checkpw(password.encode(), user.password.encode()):
         return user.id, user.fullName
     else:
-        return None
+        return None, None
 
 
 def get_from_db(db: Session, user_id, *fields):

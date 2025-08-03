@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from database.db_funcs import register_user, logIn_success, get_from_db
 from database.db_funcs import SessionLocal
+from model.forms import LoginForm, RegistrationForm
 
 
 app = Flask(
@@ -24,49 +25,81 @@ def home_page():
 
 @app.route("/about")
 def about_page():
-    return render_template("about.html")
+    if 'user_name' in session:
+        return render_template(
+            "about.html",
+            user_name=session['user_name']
+        )
+    else:
+        return render_template("about.html")
 
 
 @app.route("/features")
 def features_page():
-    return render_template("features.html")
+    if 'user_name' in session:
+        return render_template(
+            "features.html",
+            user_name=session['user_name']
+        )
+    else:
+        return render_template("features.html")
 
 
 @app.route("/signUp", methods=["GET", "POST"])
 def signUp_page():
+    form = RegistrationForm()
     message = None
-    if request.method == "POST":
-        company = request.form["company"]
-        fullName = request.form["name"]
-        email = request.form["email"]
-        password = request.form["password"]
+
+    if form.validate_on_submit():
+        company = form.company.data
+        fullName = f'{form.firstName.data} {form.lastName.data}'
+        email = form.email.data
+        userType = form.userType.data
+        password = form.password.data
+
         with SessionLocal() as db:
-            message = register_user(db, email, fullName, company, password)
-    return render_template("signUp.html", message=message)
+            message = register_user(db, email, fullName, company, userType, password)
+
+        if message == 'Registration successful':
+            return redirect(url_for('logIn_page'))
+
+    return render_template("signUp.html", form=form, message=message)
 
 
 @app.route("/logIn", methods=["GET", "POST"])
 def logIn_page():
-    if request.method == "GET":
-        if 'user_id' in session:
-            return redirect(url_for('profile_page'))
-        return render_template('logIn.html')
-
-    login = request.form["email"]
-    password = request.form["password"]
-    with SessionLocal() as db:
-        user_id, user_name = logIn_success(db, login, password)
-    if user_id:
-        session['user_id'] = user_id
-        session['user_name'] = user_name
+    if 'user_id' in session:
         return redirect(url_for('profile_page'))
-    else:
-        return render_template('logIn.html', message='Wrong email or password')
+
+    form = LoginForm()
+    if form.validate_on_submit():
+        login = form.email.data
+        password = form.password.data
+
+        with SessionLocal() as db:
+            user_id, user_name = logIn_success(db, login, password)
+        if user_id:
+            session['user_id'] = user_id
+            session['user_name'] = user_name
+            return redirect(url_for('profile_page'))
+        else:
+            return render_template(
+                'logIn.html',
+                form=form,
+                message='Wrong email or password'
+            )
+    return render_template('logIn.html', form=form)
 
 
 @app.route("/contacts")
 def contacts_page():
-    return render_template("contacts.html")
+    if 'user_name' in session:
+        return render_template(
+            "contacts.html",
+            user_name=session['user_name']
+        )
+    else:
+        return render_template("contacts.html")
 
 
 @app.route("/profile")
@@ -96,4 +129,5 @@ def settings_page():
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
+    session.pop('user_name', None)
     return redirect(url_for('home_page'))

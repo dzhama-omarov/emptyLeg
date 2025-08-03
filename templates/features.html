@@ -87,6 +87,29 @@
             margin-top: 40px;
         }
 
+        .navbar {
+            position: relative;
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 30px;
+        }
+
+        .navbar-user {
+            margin-left: auto;
+            margin-right: 40px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
         @media (max-width: 900px) {
             .feature-item {
                 width: 45%;
@@ -107,11 +130,22 @@
 
 <header>
     <h1>Features - Empty Leg Cargo Aggregator</h1>
-    <nav>
-        <a href="{{ url_for('home_page') }}">Home</a>
-        <a href="{{ url_for('about_page') }}">About</a>
-        <a href="{{ url_for('signUp_page') }}">Sign Up</a>
-        <a href="{{ url_for('contacts_page') }}">Contact</a>
+    <nav class="navbar">
+        <div class="navbar-center">
+            <a href="{{ url_for('home_page') }}">Home</a>
+            <a href="{{ url_for('about_page') }}">About</a>
+            {% if not session.get('user_name') %}
+                <a href="{{ url_for('signUp_page') }}">Sign Up</a>
+            {% endif %}
+            <a href="{{ url_for('contacts_page') }}">Contact</a>
+        </div>
+        <div class="navbar-user">
+            {% if session.get('user_name') %}
+              <a href="{{ url_for('profile_page') }}">{{ session.get('user_name') }}</a>
+            {% else %}
+              <a href="{{ url_for('logIn_page') }}">Log In</a>
+            {% endif %}
+          </div>
     </nav>
 </header>
 

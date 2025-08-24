@@ -1,3 +1,4 @@
+import json
 from flask import Flask, render_template, request, session, redirect, url_for
 from database.db_funcs import register_user, logIn_success, get_from_db
 from database.db_funcs import SessionLocal
@@ -10,6 +11,29 @@ app = Flask(
     static_folder="../static"
 )
 app.secret_key = "some_secret_key"
+
+
+def load_translation(language):
+    try:
+        with open(f"languages/{language}.json", encoding="utf-8") as dictfile:
+            return json.load(dictfile)
+    except FileNotFoundError:
+        with open("languages/en.json", encoding="utf-8") as dictfile:
+            return json.load(dictfile)
+
+
+@app.before_request
+def set_language():
+    lang = request.args.get('lang')
+    if lang:
+        session['lang'] = lang
+    session.setdefault('lang', 'en')
+
+
+@app.context_processor
+def inject_translations():
+    lang = session.get('lang', 'en')
+    return {'l': load_translation(lang)}
 
 
 @app.route("/")
@@ -124,6 +148,11 @@ def orders_page():
 @app.route("/profile/settings")
 def settings_page():
     return render_template('settings.html')
+
+
+@app.route("updateProfile")
+def update_profile():
+    
 
 
 @app.route('/logout')

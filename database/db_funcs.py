@@ -72,3 +72,8 @@ def get_from_db(db: Session, user_id, *fields):
         return result[0]
     else:
         return tuple(result)
+
+
+def update_db(db: Session, user_id, data_dict):
+    for data in data_dict:
+        

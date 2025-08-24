@@ -1,1 +1,130 @@
-<p>Settings page</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ l['accountSettings'] }} - {{ l['title'] }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0; padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        header h1 { margin: 0; }
+        nav { margin-top: 10px; }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        nav a:hover, nav a.active { text-decoration: underline; }
+        main {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 { color: #007BFF; margin-bottom: 20px; }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        label { font-weight: bold; }
+        input, select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+        button {
+            padding: 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover { background-color: #0056b3; }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Account Settings - Empty Leg Cargo Aggregator</h1>
+    <nav>
+        <a href="{{ url_for('home_page') }}">{{ l['home'] }}</a>
+        <a href="{{ url_for('about_page') }}">{{ l['about'] }}</a>
+        <a href="{{ url_for('features_page') }}">{{ l['features'] }}</a>
+        <a href="{{ url_for('contacts_page') }}">{{ l['contacts'] }}</a>
+    </nav>
+</header>
+
+<main>
+    <h2>{{ l["updateProfile"] }}</h2>
+    <form method="POST" action="{{ url_for('update_profile') }}">
+        {{ profile_form.hidden_tag() }}
+
+        <label for="firstName">{{ l["firstName"] }}</label>
+        {{ profile_form.firstName(value=current_user.first_name) }}
+
+        <label for="lastName">{{ l["lastName"] }}</label>
+        {{ profile_form.lastName(value=current_user.last_name) }}
+
+        <label for="company">{{ l["company"] }}</label>
+        {{ profile_form.company(value=current_user.company) }}
+
+        <label for="email">{{ l["email"] }}</label>
+        {{ profile_form.email(value=current_user.email) }}
+
+        <label for="userType">{{ l["userType"] }}</label>
+        {{ profile_form.userType(value=current_user.user_type) }}
+
+        {{ profile_form.submit(class="button", value="Save Changes") }}
+    </form>
+
+    <h2>{{ l["changePassword"] }}</h2>
+    <form method="POST" action="{{ url_for('change_password') }}">
+        {{ password_form.hidden_tag() }}
+
+        <label for="currentPassword">{{ l["currentPassword"] }}</label>
+        {{ password_form.currentPassword(placeholder="Enter current password") }}
+
+        <label for="newPassword">{{ l["newPassword"] }}</label>
+        {{ password_form.newPassword(placeholder="Enter new password") }}
+
+        {{ password_form.submit(class="button", value="Change Password") }}
+    </form>
+
+    {% if message %}
+        <p style="color:red; text-align:center;">{{ message }}</p>
+    {% endif %}
+</main>
+
+<footer>
+    <p>{{ l['footer'] }}</p>
+</footer>
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Empty Leg Cargo Aggregator</title>
+    <title>{{ l['title'] }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -158,72 +158,84 @@
 <body>
 
 <header>
-    <h1>Empty Leg Cargo Aggregator</h1>
+    <h1>{{ l['title'] }}</h1>
     <nav class="navbar">
         <div class="navbar-center">
-            <a href="{{ url_for('about_page') }}">About</a>
-            <a href="{{ url_for('features_page') }}">Features</a>
+            <a href="{{ url_for('about_page') }}">{{ l['about'] }}</a>
+            <a href="{{ url_for('features_page') }}">{{ l['features'] }}</a>
             {% if not session.get('user_name') %}
-                <a href="{{ url_for('signUp_page') }}">Sign Up</a>
+                <a href="{{ url_for('signUp_page') }}">{{ l['signUp'] }}</a>
             {% endif %}
-            <a href="{{ url_for('contacts_page') }}">Contacts</a>
-            
+            <a href="{{ url_for('contacts_page') }}">{{ l['contacts'] }}</a>
         </div>
-        <div class="navbar-user">
-            {% if session.get('user_name') %}
-              <a href="{{ url_for('profile_page') }}">{{ session.get('user_name') }}</a>
-            {% else %}
-              <a href="{{ url_for('logIn_page') }}">Log In</a>
-            {% endif %}
-          </div>
+    
+        <div style="margin-left: auto; margin-right: 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
+            <form method="get" action="" id="lang-form" style="margin: 0;">
+                <select name="lang" onchange="document.getElementById('lang-form').submit();">
+                    <option value="en" {% if session.get('lang') == 'en' %}selected{% endif %}>English</option>
+                    <option value="ru" {% if session.get('lang') == 'ru' %}selected{% endif %}>Русский</option>
+                    <option value="de" {% if session.get('lang') == 'de' %}selected{% endif %}>Deutsch</option>
+                    <option value="sk" {% if session.get('lang') == 'sk' %}selected{% endif %}>Slovenčina</option>
+                </select>
+            </form>
+    
+            <div class="navbar-user">
+                {% if session.get('user_name') %}
+                  <a href="{{ url_for('profile_page') }}">{{ session.get('user_name') }}</a>
+                {% else %}
+                  <a href="{{ url_for('logIn_page') }}">Log In</a>
+                {% endif %}
+            </div>
+        </div>
     </nav>
+    
 </header>
 
 <section class="hero" id="about">
-    <h2>Connecting Empty Legs with Cargo Needs</h2>
+    <h2>{{ l['heroTitle'] }}</h2>
     <p>
-        Maximize flight efficiency and reduce costs by connecting companies with available empty cargo flights to those needing delivery. Our platform simplifies the process of finding and offering empty leg routes to optimize cargo logistics worldwide.
+        {{ l['heroText'] }}
     </p>
     <div class="cta-buttons">
         {% if not session.get('user_name') %}
-            <a href="{{ url_for('signUp_page') }}">Get Started</a>
+            <a href="{{ url_for('signUp_page') }}">{{ l['getStarted'] }}</a>
         {% else %}
-            <a href="{{ url_for('profile_page') }}">My Profile</a>
+            <a href="{{ url_for('profile_page') }}">{{ l['myProfile'] }}</a>
         {% endif %}
-        <a href="{{ url_for('features_page') }}">Learn More</a>
+        <a href="{{ url_for('features_page') }}">{{ l['learnMore'] }}</a>
     </div>
 </section>
 
 <section id="features">
-    <h3>Why Use Our Platform?</h3>
+    <h3>{{ l['whyUse'] }}</h3>
     <div class="features">
         <div class="feature">
-            <h4>Cost Savings</h4>
-            <p>Access affordable cargo routes by utilizing empty legs, saving money for logistics companies.</p>
+            <h4>{{ l['costSavings'] }}</h4>
+            <p>{{ l['costSavingsText'] }}</p>
         </div>
         <div class="feature">
-            <h4>Environmental Benefits</h4>
-            <p>Reduce carbon footprint by maximizing the utilization of existing flights.</p>
+            <h4>{{ l['environmental'] }}</h4>
+            <p>{{ l['environmentalText'] }}</p>
         </div>
         <div class="feature">
-            <h4>Global Network</h4>
-            <p>Connect with a worldwide network of cargo providers and shippers for seamless logistics.</p>
+            <h4>{{ l['globalNetwork'] }}</h4>
+            <p>{{ l['globalNetworkText'] }}</p>
         </div>
     </div>
 </section>
 
 {% if not session.get('user_name') %}
     <section id="sign-up" style="background-color:#fff;">
-        <h3 style="text-align:center; margin-bottom:20px;">Join Our Platform</h3>
-        <p style="text-align:center;">Sign up today to start connecting empty flights with cargo needs and optimize your logistics.</p>
+        <h3 style="text-align:center; margin-bottom:20px;">{{ l['joinTitle'] }}</h3>
+        <p style="text-align:center;">{{ l['joinText'] }}</p>
         <div style="text-align:center; margin-top:20px;">
-            <a href="{{ url_for('signUp_page') }}" style="padding:15px 30px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">Sign Up Now</a>
+            <a href="{{ url_for('signUp_page') }}" style="padding:15px 30px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">{{ l['joinButton'] }}</a>
         </div>
     </section>
 {% endif %}
 
 <footer>
-    <p>&copy; 2025 Empty Leg Cargo Aggregator. All rights reserved.</p>
+    <p>{{ l['footer'] }}</p>
 </footer>
 
 </body>

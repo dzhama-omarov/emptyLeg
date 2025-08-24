@@ -150,9 +150,9 @@ def settings_page():
     return render_template('settings.html')
 
 
-@app.route("updateProfile")
+@app.route("/updateProfile")
 def update_profile():
-    
+    pass
 
 
 @app.route('/logout')

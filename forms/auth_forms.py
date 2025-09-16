@@ -1,3 +1,9 @@
+"""Authentication-related WTForms used in auth templates.
+
+Contains `RegistrationForm` and `LoginForm` with field-level
+validation for password strength and email formatting.
+"""
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import (
@@ -7,15 +13,30 @@ import re
 
 
 class RegistrationForm(FlaskForm):
-    company = StringField('Company Name', validators=[
-        DataRequired(message='Company name is required'),
-        Length(min=2, max=100, message='Company name must be between 2 and 100 characters')
-    ])
+    """Registration form with basic password strength validation."""
+    company = StringField(
+        'Company Name',
+        validators=[
+            DataRequired(message='Company name is required'),
+            Length(
+                min=2,
+                max=100,
+                message='Company name must be between 2 and 100 characters',
+            ),
+        ],
+    )
 
-    full_name = StringField('Full Name', validators=[
-        DataRequired(message='Full name is required'),
-        Length(min=2, max=100, message='Full name must be between 2 and 100 characters')
-    ])
+    full_name = StringField(
+        'Full Name',
+        validators=[
+            DataRequired(message='Full name is required'),
+            Length(
+                min=2,
+                max=100,
+                message='Full name must be between 2 and 100 characters',
+            ),
+        ],
+    )
 
     email = StringField('Email Address', validators=[
         DataRequired(message='Email is required'),
@@ -36,14 +57,20 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
     def validate_password(self, password):
+        """Ensure the password contains at least one letter and one number."""
         if password.data:
             if not re.search(r'[A-Za-z]', password.data):
-                raise ValidationError('Password must contain at least one letter')
+                raise ValidationError(
+                    'Password must contain at least one letter'
+                )
             if not re.search(r'\d', password.data):
-                raise ValidationError('Password must contain at least one number')
+                raise ValidationError(
+                    'Password must contain at least one number'
+                )
 
 
 class LoginForm(FlaskForm):
+    """Simple login form with optional remember-me flag."""
     email = StringField('Email Address', validators=[
         DataRequired(message='Email is required'),
         Email(message='Please enter a valid email address')

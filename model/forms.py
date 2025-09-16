@@ -1,3 +1,9 @@
+"""Form definitions used by the Flask application.
+
+This module contains WTForms form classes for user authentication and
+registration used in server-side rendered templates.
+"""
+
 from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
@@ -5,6 +11,7 @@ from model.dbModels import UserTypeEnum
 
 
 class LoginForm(FlaskForm):
+    """Form for user authentication (email and password)."""
     email = StringField(
         'Email', validators=[
             DataRequired(message='email requred'),
@@ -21,6 +28,7 @@ class LoginForm(FlaskForm):
 
 
 class RegistrationForm(FlaskForm):
+    """Form for new user registration with validation."""
     firstName = StringField('First name', validators=[
         DataRequired(message='First name')
     ])

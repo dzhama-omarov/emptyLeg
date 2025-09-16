@@ -182,9 +182,8 @@
             <div class="navbar-user">
                 {% if session.get('user_name') %}
                   <a href="{{ url_for('profile_page') }}">{{ session.get('user_name') }}</a>
-                {% else %}
-                  <a href="{{ url_for('logIn_page') }}">Log In</a>
                 {% endif %}
+                <a href="{{ url_for('logIn_page') }}">{{ l['logIn'] }}</a>
             </div>
         </div>
     </nav>

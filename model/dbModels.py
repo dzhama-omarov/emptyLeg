@@ -1,3 +1,18 @@
+"""
+SQLAlchemy ORM models and enumerations for the application domain.
+
+This module defines:
+- Enumerations for user types, cargo types, currencies,
+  contract and payment statuses.
+- ORM models: `User`, `Order`, and `Contract` with relationships
+  between them.
+
+Notes:
+- Relationships are declared bi-directionally using
+  `back_populates`.
+- `foreign_keys` are specified where multiple FKs point to the
+  same target table.
+"""
 from sqlalchemy import (
     Column, ForeignKey, Integer, String, DateTime, Boolean, Float, Text
 )
@@ -9,12 +24,14 @@ Base = declarative_base()
 
 
 class UserTypeEnum(enum.Enum):
+    """Types of users supported by the platform."""
     charterer = "Charterer"
     carrier = "Carrier"
     broker = "Broker"
 
 
 class CargoTypeEnum(enum.Enum):
+    """Supported cargo categories for orders."""
     general = "General Cargo"
     special = "Special Cargo"
     dangerous = "Dangerous Goods"
@@ -24,6 +41,7 @@ class CargoTypeEnum(enum.Enum):
 
 
 class CurrencyEnum(enum.Enum):
+    """Currencies supported for order pricing."""
     usd = "USD"
     eur = "EUR"
     rub = "RUB"
@@ -32,12 +50,14 @@ class CurrencyEnum(enum.Enum):
 
 
 class ContractStatusEnum(enum.Enum):
+    """Lifecycle statuses for contracts between users."""
     pending = "Pending"
     signed = "Signed"
     cancelled = "Cancelled"
 
 
 class PaymentStatusEnum(enum.Enum):
+    """Payment states for orders and invoices."""
     paid = "Paid"
     pending = "Pending"
     overdue = "Overdue"
@@ -50,6 +70,16 @@ class PaymentStatusEnum(enum.Enum):
 
 
 class User(Base):
+    """Application user with authentication data and business relations.
+
+    Relationships:
+    - `orders`: Orders created by the user.
+    - `joined_orders`: Orders where the user is a partner.
+    - `chartererContracts`: Contracts where the user acts as a
+      charterer.
+    - `carrierContracts`: Contracts where the user acts as a
+      carrier.
+    """
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -60,13 +90,36 @@ class User(Base):
     userRep = Column(Float)
     password = Column(String)
 
-    orders = relationship("Order", back_populates="user", foreign_keys="Order.userId")
-    joined_orders = relationship("Order", back_populates="partner", foreign_keys="Order.partnerUser")
-    chartererContracts = relationship("Contract", back_populates="charterer", foreign_keys="Contract.chartererId")
-    carrierContracts = relationship("Contract", back_populates="carrier", foreign_keys="Contract.carrierId")
+    orders = relationship(
+        "Order",
+        back_populates="user",
+        foreign_keys="Order.userId",
+    )
+    joined_orders = relationship(
+        "Order",
+        back_populates="partner",
+        foreign_keys="Order.partnerUser",
+    )
+    chartererContracts = relationship(
+        "Contract",
+        back_populates="charterer",
+        foreign_keys="Contract.chartererId",
+    )
+    carrierContracts = relationship(
+        "Contract",
+        back_populates="carrier",
+        foreign_keys="Contract.carrierId",
+    )
 
 
 class Order(Base):
+    """Shipment order describing a flight leg and associated cargo.
+
+    Relationships:
+    - `user`: The creator/owner of the order.
+    - `partner`: The counterparty user (e.g., carrier/charterer).
+    - `contract`: Optional contract associated with this order.
+    """
     __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -96,12 +149,27 @@ class Order(Base):
     orderStatus = Column(String, nullable=False)
     isEmptyLegMatch = Column(Boolean, nullable=False)
 
-    user = relationship("User", back_populates="orders", foreign_keys=[userId])
-    partner = relationship("User", back_populates="joined_orders", foreign_keys=[partnerUser])
+    user = relationship(
+        "User",
+        back_populates="orders",
+        foreign_keys=[userId],
+    )
+    partner = relationship(
+        "User",
+        back_populates="joined_orders",
+        foreign_keys=[partnerUser],
+    )
     contract = relationship("Contract", back_populates="orders")
 
 
 class Contract(Base):
+    """Contract agreed between a charterer and a carrier.
+
+    Relationships:
+    - `orders`: Orders governed by this contract.
+    - `charterer`: The charterer user.
+    - `carrier`: The carrier user.
+    """
     __tablename__ = "contracts"
 
     id = Column(Integer, primary_key=True)
@@ -116,5 +184,13 @@ class Contract(Base):
     createdAt = Column(DateTime)
 
     orders = relationship("Order", back_populates="contract")
-    charterer = relationship("User", back_populates="chartererContracts", foreign_keys=[chartererId])
-    carrier = relationship("User", back_populates="carrierContracts", foreign_keys=[carrierId])
+    charterer = relationship(
+        "User",
+        back_populates="chartererContracts",
+        foreign_keys=[chartererId],
+    )
+    carrier = relationship(
+        "User",
+        back_populates="carrierContracts",
+        foreign_keys=[carrierId],
+    )

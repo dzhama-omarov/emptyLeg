@@ -112,9 +112,9 @@
     <h1>Empty Leg Cargo Aggregator</h1>
     <nav class="navbar">
         <div class="navbar-center">
-            <a href="{{ url_for('about_page') }}">About</a>
-            <a href="{{ url_for('features_page') }}">Features</a>
-            <a href="{{ url_for('contacts_page') }}">Contacts</a>
+            <a href="{{ url_for('about_page') }}">{{ l['about'] }}</a>
+            <a href="{{ url_for('features_page') }}">{{ l['features'] }}</a>
+            <a href="{{ url_for('contacts_page') }}">{{ l['contacts'] }}</a>
         </div>
         <div style="margin-left: auto; margin-right: 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
             <form method="get" action="" id="lang-form" style="margin: 0;">

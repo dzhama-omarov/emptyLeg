@@ -137,11 +137,11 @@
     <h1>Contact Us - Empty Leg Cargo Aggregator</h1>
     <nav class="navbar">
         <div class="navbar-center">
-            <a href="{{ url_for('home_page') }}">Home</a>
-            <a href="{{ url_for('about_page') }}">About</a>
-            <a href="{{ url_for('features_page') }}">Features</a>
+            <a href="{{ url_for('home_page') }}">{{ l['home'] }}</a>
+            <a href="{{ url_for('about_page') }}">{{ l['about'] }}</a>
+            <a href="{{ url_for('features_page') }}">{{ l['features'] }}</a>
             {% if not session.get('user_name') %}
-                <a href="{{ url_for('signUp_page') }}">Sign Up</a>
+                <a href="{{ url_for('signUp_page') }}">{{ l['signUp'] }}</a>
             {% endif %}
         </div>
         <div style="margin-left: auto; margin-right: 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">

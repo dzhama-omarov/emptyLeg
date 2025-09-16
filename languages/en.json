@@ -32,5 +32,10 @@
     "userType": "Account Type",
     "changePassword": "Change Password",
     "currentPassword": "Current Password",
-    "newPassword": "New Password"
+    "newPassword": "New Password",
+
+    "welcome": "Welcome",
+    "placeOrder": "Place Order",
+    "orderHistory": "Orders History",
+    "logOut": "Log Out"
 }

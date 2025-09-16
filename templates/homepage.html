@@ -131,10 +131,26 @@
         }
 
         .navbar-user {
-            margin-left: auto;
-            margin-right: 40px;
+            position: absolute;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .navbar-user a {
+            color: white;
+            text-decoration: none;
             font-weight: bold;
-            white-space: nowrap;
+        }
+        .navbar-user a:hover {
+            text-decoration: underline;
+        }
+        .lang-select form {
+            margin: 0;
+        }
+        .lang-select select {
+            padding: 5px;
+            border-radius: 4px;
         }
 
         @media(max-width: 768px) {
@@ -169,21 +185,21 @@
             <a href="{{ url_for('contacts_page') }}">{{ l['contacts'] }}</a>
         </div>
     
-        <div style="margin-left: auto; margin-right: 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
-            <form method="get" action="" id="lang-form" style="margin: 0;">
-                <select name="lang" onchange="document.getElementById('lang-form').submit();">
-                    <option value="en" {% if session.get('lang') == 'en' %}selected{% endif %}>English</option>
-                    <option value="ru" {% if session.get('lang') == 'ru' %}selected{% endif %}>Русский</option>
-                    <option value="de" {% if session.get('lang') == 'de' %}selected{% endif %}>Deutsch</option>
-                    <option value="sk" {% if session.get('lang') == 'sk' %}selected{% endif %}>Slovenčina</option>
-                </select>
-            </form>
-    
             <div class="navbar-user">
+                <form method="get" action="" class="lang-select">
+                    <select name="lang" onchange="this.form.submit();">
+                        <option value="en" {% if session.get('lang') == 'en' %}selected{% endif %}>English</option>
+                        <option value="ru" {% if session.get('lang') == 'ru' %}selected{% endif %}>Русский</option>
+                        <option value="de" {% if session.get('lang') == 'de' %}selected{% endif %}>Deutsch</option>
+                        <option value="sk" {% if session.get('lang') == 'sk' %}selected{% endif %}>Slovenčina</option>
+                    </select>
+                </form>
+
                 {% if session.get('user_name') %}
                   <a href="{{ url_for('profile_page') }}">{{ session.get('user_name') }}</a>
+                {% else %}
+                  <a href="{{ url_for('logIn_page') }}">{{ l['logIn'] }}</a>
                 {% endif %}
-                <a href="{{ url_for('logIn_page') }}">{{ l['logIn'] }}</a>
             </div>
         </div>
     </nav>

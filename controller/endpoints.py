@@ -248,6 +248,11 @@ def orders_page():
     return render_template('orders.html')
 
 
+@app.route("/profile/newOrder")
+def new_order_page():
+    pass
+
+
 @app.route("/profile/settings")
 def settings_page():
     """
